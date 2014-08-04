@@ -1,0 +1,28 @@
+{
+  "name": "swag_list",
+  "version": "0.0.1",
+  "description": "concert list",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/indotek68/swag_list.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/indotek68/swag_list/issues"
+  },
+  "homepage": "https://github.com/indotek68/swag_list",
+  "dependencies": {
+    "body-parser": "^1.5.2",
+    "express": "^4.7.2",
+    "lodash": "^2.4.1",
+    "override": "0.0.1",
+    "pg": "^3.4.0",
+    "sequelize": "^1.7.9",
+    "sequelize-cli": "^0.2.3"
+  }
+}
