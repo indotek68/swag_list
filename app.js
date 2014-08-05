@@ -33,14 +33,13 @@ app.get('/search', function(req, res){
 
 	var url = "http://api.bandsintown.com/events/search?location="+ area +"&radius="+radius+"&date="+date+"&format=json&app_id=SWAG_LIST";
 
-	console.log("Url" + url)
-	console.log(date)
+	// console.log("Url" + url)
+	// console.log(date)
 
 	request(url, function(error, response, body){
 		if(!error){
 			var body = JSON.parse(body);
-			// var artist = body.Events.artist;
-			console.log(body)
+			//console.log(body)
 			res.render('results', {eventsList: body, date: date})
 		}
 	})

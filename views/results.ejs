@@ -12,34 +12,49 @@
 					<% }) %>
 				<% }) %>
 
-		<script>
-		L.mapbox.accessToken = 'pk.eyJ1IjoiaW5kb3RlazY4IiwiYSI6Im9Md3Q5SGMifQ.v-CzVWIHkkKA2hMUkmDpUw';
-		var map = L.mapbox.map('map', 'examples.map-20v6611k')
-		    .setView([38.91338, -77.03236], 16);
 
-		L.mapbox.featureLayer({
-		    // this feature is in the GeoJSON format: see geojson.org
-		    // for the full specification
-		    type: 'Feature',
-		    geometry: {
-		        type: 'Point',
-		        // coordinates here are in longitude, latitude order because
-		        // x, y is the standard for GeoJSON and many formats
-		        coordinates: [
-		          -77.03221142292,
-		          38.913371603574 
-		        ]
-		    },
-		    properties: {
-		        title: 'Peregrine Espresso',
-		        description: '1718 14th St NW, Washington, DC',
-		        // one can customize markers by adding simplestyle properties
-		        // https://www.mapbox.com/foundations/an-open-platform/#simplestyle
-		        'marker-size': 'large',
-		        'marker-color': '#BE9A6B',
-		        'marker-symbol': 'cafe'
-		    }
-		}).addTo(map);
-		</script>
 
 <% include partials/footer.ejs %>  
+<script>
+  
+  eventsList = <%- JSON.stringify(eventsList) %>;
+  console.log("eventsList" + eventsList);
+  L.mapbox.accessToken = 'pk.eyJ1IjoiaW5kb3RlazY4IiwiYSI6Im9Md3Q5SGMifQ.v-CzVWIHkkKA2hMUkmDpUw';
+
+  var featuresArray = [];
+
+  eventsList.forEach(function(event){
+    var venues = {
+      type: 'Feature',
+      properties: {
+          title: event.venue.name,
+          description: event.venue.city + ", " + event.venue.region,
+          url: event.venue.url,
+          'marker-color': '#f86767',
+          'marker-size': 'large',
+          'marker-symbol': 'music',
+      },
+      geometry: {
+          type: 'Point',
+          coordinates: [event.venue.longitude, event.venue.latitude]
+      }
+    }
+    featuresArray.push(venues);
+  })
+  console.log("featuresArray" + featuresArray)
+
+	var map = L.mapbox.map('map', 'examples.map-h67hf2ic')
+		  .setView([37.775316, -122.437684], 16);
+
+	var myLayer = L.mapbox.featureLayer().addTo(map);
+
+	// The GeoJSON representing the two point features
+	var geojson = {
+	    type: 'FeatureCollection',
+	    features: featuresArray
+	};
+
+	myLayer.setGeoJSON(geojson);
+  map.fitBounds(myLayer.getBounds());
+	
+</script>
