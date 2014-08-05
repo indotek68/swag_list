@@ -1,16 +1,45 @@
-<!-- results.ejs -->
-<!DOCTYPE html />
+<% include partials/header.ejs %>   
 
-<html>
-<head>
-	<title>Events</title>
-</head>
-<body>
-	<div>
-		<%eventList.forEach(function(event){ %>
-			<p><%= event.Venue %></p>
+		<div id='map'></div>
+		<h2><%=date %></h2>
+		<div>
+			<% eventsList.forEach(function(event){ %>
+				<h4><%=event.venue.name %></h4>
+				<p><%=event.venue.city %>, <%=event.venue.region %></p>
 
-			<% }) %>
-	</div>
-</body>
-</html>
+				<% event.artists.forEach(function(artist){ %>
+					<p><%=artist.name %></p>
+					<% }) %>
+				<% }) %>
+
+		<script>
+		L.mapbox.accessToken = 'pk.eyJ1IjoiaW5kb3RlazY4IiwiYSI6Im9Md3Q5SGMifQ.v-CzVWIHkkKA2hMUkmDpUw';
+		var map = L.mapbox.map('map', 'examples.map-20v6611k')
+		    .setView([38.91338, -77.03236], 16);
+
+		L.mapbox.featureLayer({
+		    // this feature is in the GeoJSON format: see geojson.org
+		    // for the full specification
+		    type: 'Feature',
+		    geometry: {
+		        type: 'Point',
+		        // coordinates here are in longitude, latitude order because
+		        // x, y is the standard for GeoJSON and many formats
+		        coordinates: [
+		          -77.03221142292,
+		          38.913371603574 
+		        ]
+		    },
+		    properties: {
+		        title: 'Peregrine Espresso',
+		        description: '1718 14th St NW, Washington, DC',
+		        // one can customize markers by adding simplestyle properties
+		        // https://www.mapbox.com/foundations/an-open-platform/#simplestyle
+		        'marker-size': 'large',
+		        'marker-color': '#BE9A6B',
+		        'marker-symbol': 'cafe'
+		    }
+		}).addTo(map);
+		</script>
+
+<% include partials/footer.ejs %>  

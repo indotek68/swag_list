@@ -1,21 +1,18 @@
-<!DOCTYPE html />
+<% include partials/header.ejs %> 
 
-<html>
-<head>
-	<title>Events</title>
-</head>
-<body>
-	<form method='get' action="/">
-		<label for="zip">Zip Code</label>
-		<input id="zip" type="text" name="zip">
+	<div>
+		<form action="/search">
+			<label for="area">City, State</label>
+			<input placeholder="San Francisco, CA" id="area" type="text" name="area">
 
-		<label for="radius">Radius</label>
-		<input id="radius" type="text" name="radius">
+			<label for="radius">Radius</label>
+			<input id="radius" type="text" name="radius">
 
-		<label for="date">Date</label>
-		<input id="date" type="text" name="Date">
+			<label for="date">Date</label>
+			<input id="date" type="date" placeholder="MM/DD/YYYY" name="date">
 
-		<input type="submit" value="Submit">
-	</form>
-</body>
-</html>
+			<input type="submit" value="Submit">
+		</form>
+	</div>
+	
+<% include partials/footer.ejs %> 
