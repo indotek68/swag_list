@@ -8,13 +8,18 @@
 	font-family: 'Lobster', cursive;
 }
 
+.container .jumbotron{
+	padding: 1em 1em;
+}
+
+.margin-bottom {
+	margin-bottom: 1em;
+}
+
 #splash-logo {
 	width: 30%;
 	height: 30%;
 
-}
-.margin-bottom {
-	margin-bottom: 1em;
 }
 
 #splash-btn {

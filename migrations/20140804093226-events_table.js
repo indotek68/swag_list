@@ -10,10 +10,6 @@ module.exports = {
         createdAt: DataTypes.DATE, 
         updatedAt: DataTypes.DATE,
         eventId: DataTypes.STRING,
-        userId: {
-          type: DataTypes.INTEGER,
-          foreignKey: true
-        }
       })
     .complete(done)
   },
