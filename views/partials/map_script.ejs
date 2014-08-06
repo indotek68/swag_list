@@ -1,0 +1,51 @@
+<!-- map_script.ejs -->
+
+<script>
+  
+  eventsList = <%- JSON.stringify(eventsList) %>;
+  console.log("eventsList" + eventsList);
+  L.mapbox.accessToken = 'pk.eyJ1IjoiaW5kb3RlazY4IiwiYSI6Im9Md3Q5SGMifQ.v-CzVWIHkkKA2hMUkmDpUw';
+
+  var featuresArray = [];
+
+  eventsList.forEach(function(event){
+    var artistsArray = []
+   
+    event.artists.forEach(function(artist){
+      artistsArray.push(" " + artist.name)
+   })
+
+    var venues = {
+      type: 'Feature',
+      properties: {
+          title: "<h6>" + event.venue.name + "</h6>",
+          description: "<strong>"+ event.venue.city + "</strong>,<strong>" + event.venue.region + "</strong><br>"+artistsArray,
+          url: event.venue.url,
+          'marker-color': '#f86767',
+          'marker-size': 'large',
+          'marker-symbol': 'music',
+      },
+      geometry: {
+          type: 'Point',
+          coordinates: [event.venue.longitude, event.venue.latitude]
+      }
+    }
+    featuresArray.push(venues);
+  })
+  console.log("featuresArray" + featuresArray)
+
+	var map = L.mapbox.map('map', 'examples.map-h67hf2ic')
+		  .setView([37.775316, -122.437684], 16);
+
+	var myLayer = L.mapbox.featureLayer().addTo(map);
+
+	// The GeoJSON representing the two point features
+	var geojson = {
+	    type: 'FeatureCollection',
+	    features: featuresArray
+	};
+
+	myLayer.setGeoJSON(geojson);
+  map.fitBounds(myLayer.getBounds());
+	
+</script>

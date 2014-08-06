@@ -10,12 +10,12 @@ var app = express();
 app.use(bodyParser.urlencoded());
 app.set('view engine', 'ejs');
 
-app.get('/home', function(req, res){
-	res.render('home')
+app.get('/', function(req, res){
+	res.render('splash')
 })
 
-app.get('/events', function(req, res){
-	res.render('events')
+app.get('/search', function(req, res){
+	res.render('search')
 })
 
 app.get('/signup', function(req, res){
@@ -26,7 +26,7 @@ app.get('/login', function(req, res){
 	res.render('login')
 })
 
-app.get('/search', function(req, res){
+app.get('/find', function(req, res){
 	var area = req.query.area;
 	var radius = req.query.radius;
 	var date = req.query.date;
@@ -41,6 +41,33 @@ app.get('/search', function(req, res){
 			var body = JSON.parse(body);
 			//console.log(body)
 			res.render('results', {eventsList: body, date: date})
+		}
+	})
+})
+
+app.get('/event/:venueId/:eventId', function(req, res){
+	var venueId = req.params.venueId;
+	var eventId = req.params.eventId;
+	//console.log("venue " + venueId)
+	//using venue events api
+	var venueUrl = "http://api.bandsintown.com/venues/" + venueId + "/events.json?app_id=SWAG_LIST"
+
+	request(venueUrl, function(error, response, body){
+		if(!error){
+			var	body = JSON.parse(body);
+
+			body.forEach(function(event){
+				console.log("LOOPED ONCE! WTF IS GOING ON?")
+
+				if(event.id === Number(eventId)){
+					res.render('event', {event: event})
+					console.log(event)
+				}
+				else{
+					console.log("NO MATCHES!")
+				}
+				
+			})
 		}
 	})
 })

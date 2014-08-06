@@ -3,58 +3,19 @@
 		<div id='map'></div>
 		<h2><%=date %></h2>
 		<div>
-			<% eventsList.forEach(function(event){ %>
-				<h4><%=event.venue.name %></h4>
-				<p><%=event.venue.city %>, <%=event.venue.region %></p>
+  			<% eventsList.forEach(function(event){ %>
+        <a href="event/<%= event.venue.id %>/<%= event.id %>">
+  				<h4><%=event.venue.name %></h4>
+          <p><%=event.venue.city %>, <%=event.venue.region %></p>
 
-				<% event.artists.forEach(function(artist){ %>
-					<p><%=artist.name %></p>
-					<% }) %>
-				<% }) %>
+  				<% event.artists.forEach(function(artist){ %>
+  					<p><%=artist.name %></p>
+  					<% }) %>
+  				<% }) %>
+      </a>
+    </div>
 
 
 
 <% include partials/footer.ejs %>  
-<script>
-  
-  eventsList = <%- JSON.stringify(eventsList) %>;
-  console.log("eventsList" + eventsList);
-  L.mapbox.accessToken = 'pk.eyJ1IjoiaW5kb3RlazY4IiwiYSI6Im9Md3Q5SGMifQ.v-CzVWIHkkKA2hMUkmDpUw';
-
-  var featuresArray = [];
-
-  eventsList.forEach(function(event){
-    var venues = {
-      type: 'Feature',
-      properties: {
-          title: event.venue.name,
-          description: event.venue.city + ", " + event.venue.region,
-          url: event.venue.url,
-          'marker-color': '#f86767',
-          'marker-size': 'large',
-          'marker-symbol': 'music',
-      },
-      geometry: {
-          type: 'Point',
-          coordinates: [event.venue.longitude, event.venue.latitude]
-      }
-    }
-    featuresArray.push(venues);
-  })
-  console.log("featuresArray" + featuresArray)
-
-	var map = L.mapbox.map('map', 'examples.map-h67hf2ic')
-		  .setView([37.775316, -122.437684], 16);
-
-	var myLayer = L.mapbox.featureLayer().addTo(map);
-
-	// The GeoJSON representing the two point features
-	var geojson = {
-	    type: 'FeatureCollection',
-	    features: featuresArray
-	};
-
-	myLayer.setGeoJSON(geojson);
-  map.fitBounds(myLayer.getBounds());
-	
-</script>
+<% include partials/map_script.ejs %>  
