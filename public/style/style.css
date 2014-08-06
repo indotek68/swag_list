@@ -4,7 +4,11 @@
 	color: black;
 }
 
-#splash_logo {
+.splash-text{
+	font-family: 'Lobster', cursive;
+}
+
+#splash-logo {
 	width: 30%;
 	height: 30%;
 
@@ -13,7 +17,7 @@
 	margin-bottom: 1em;
 }
 
-#splash_btn {
+#splash-btn {
 	margin: 2em;
 }
 

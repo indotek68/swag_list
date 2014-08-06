@@ -97,7 +97,7 @@ app.get("/mylist", function(render, res){
 	//console.log(myListArray)
 })
 
-app.listen(3000, function(){
+app.listen(process.env.PORT || 3000, function(){
   console.log("SERVER listening on 3000")
 })
 
