@@ -12,19 +12,19 @@ app.set('view engine', 'ejs');
 
 app.get('/', function(req, res){
 	res.render('splash')
-})
+});
 
 app.get('/search', function(req, res){
 	res.render('search')
-})
+});
 
 app.get('/signup', function(req, res){
 	res.render('signup')
-})
+});
 
 app.get('/login', function(req, res){
 	res.render('login')
-})
+});
 
 app.get('/find', function(req, res){
 	var area = req.query.area;

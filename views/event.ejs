@@ -1,21 +1,20 @@
 <% include partials/header.ejs %>  
 
-<a href="<%= event.venue.url%>"><h3><%= event.venue.name %><h3></a>
-<h4><%= event.venue.city %> <%= event.venue.region %> </h4>
+<a href="<%= eventsList.venue.url%>"><h3><%= eventsList.venue.name %><h3></a>
+<h4><%= eventsList.venue.city %> <%= eventsList.venue.region %> </h4>
 <strong>Showtime: </strong>
-<p><%= event.datetime %><p>
+<p><%= eventsList.datetime %><p>
 
 <strong>Artist:</strong>
-<% event.artists.forEach(function(artist){ %>
-	<p><%= artist.name %></p>
+<% eventsList.artists.forEach(function(artist){ %>
+	<p><a href="<%=artist.url%>"><%= artist.name %></p></a>
 	<% }) %>
 
 <strong>Event Url:</strong> 
-<p><a href="<%= event.url %>"><%= event.url %></a>
+<p><a href="<%= eventsList.url %>"><%= eventsList.url %></a></p>
 
 <strong>Ticket Status:</strong> 
-<p><%= event.ticket_status %></p>
-<a class="btn btn-default" href="<%= event.ticket_url %>">Buy Tickets</a>
+<p><%= eventsList.ticket_status %></p>
+<a class="btn btn-default" href="<%= eventsList.ticket_url %>">Buy Tickets</a>
 
-<% include partials/footer.ejs %>  
- 
+<% include partials/footer.ejs %>
