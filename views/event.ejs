@@ -17,4 +17,10 @@
 <p><%= eventsList.ticket_status %></p>
 <a class="btn btn-default" href="<%= eventsList.ticket_url %>">Buy Tickets</a>
 
+<form method="post" action="/mylist">
+	<input type="hidden" name="myList" value="<%= JSON.stringify(eventsList) %>">
+
+	<input class="btn btn-default" type="submit" value="Save To My List">
+</form>
+
 <% include partials/footer.ejs %>

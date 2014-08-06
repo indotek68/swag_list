@@ -6,26 +6,33 @@ var request = require("request");
 var bodyParser = require("body-parser");
 
 var app = express();
+var myListArray = [];
+
 
 app.use(bodyParser.urlencoded());
 app.set('view engine', 'ejs');
 
+//splash page
 app.get('/', function(req, res){
 	res.render('splash')
 });
 
+//search
 app.get('/search', function(req, res){
 	res.render('search')
 });
 
+//signup
 app.get('/signup', function(req, res){
 	res.render('signup')
 });
 
+//login
 app.get('/login', function(req, res){
 	res.render('login')
 });
 
+//find this works with the api to request the url and sends body to results.ejs
 app.get('/find', function(req, res){
 	var area = req.query.area;
 	var radius = req.query.radius;
@@ -45,6 +52,7 @@ app.get('/find', function(req, res){
 	})
 })
 
+//event page, shows detailed info of a single event
 app.get('/event/:venueId/:eventId', function(req, res){
 	var venueId = req.params.venueId;
 	var eventId = req.params.eventId;
@@ -73,6 +81,26 @@ app.get('/event/:venueId/:eventId', function(req, res){
 	})
 })
 
+app.post("/mylist", function(req, res){
+	var event = req.body.myList;
+	console.log(event)
+
+	res.redirect("/myList")
+})
+
+app.get("/mylist", function(render, res){
+	res.render("mylist", {mylist: myListArray})
+})
+
 app.listen(3000, function(){
   console.log("SERVER listening on 3000")
 })
+
+
+
+
+
+
+
+
+
