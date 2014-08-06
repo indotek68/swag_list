@@ -1,0 +1,23 @@
+.navbar-brand {
+	font-family: 'Lobster', cursive;
+	font-size: 2em;
+	color: black;
+}
+
+#splash_logo {
+	width: 30%;
+	height: 30%;
+
+}
+.margin-bottom {
+	margin-bottom: 1em;
+}
+
+#splash_btn {
+	margin: 2em;
+}
+
+footer {
+	height: 5em;
+}
+

@@ -4,11 +4,13 @@ var express = require("express");
 // var db = require("./models/index.js");
 var request = require("request");
 var bodyParser = require("body-parser");
+var date = require( 'useful-date' );
+var dateEng = require( 'useful-date/locale/en-US.js' );
 
 var app = express();
 var myListArray = [];
 
-
+app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded());
 app.set('view engine', 'ejs');
 
@@ -82,7 +84,7 @@ app.get('/event/:venueId/:eventId', function(req, res){
 })
 
 app.post("/mylist", function(req, res){
-	var event = req.body.myList;
+	var event = JSON.parse(req.body.myList);
 	console.log(event)
 
 	myListArray.push(event)
