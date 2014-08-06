@@ -42,20 +42,24 @@ function User(sequelize, DataTypes){
         return bcrypt.comparSync(userpass, dbpass);
       },
       createNewUser: function(email, username, password, err, success){
-        if(passwor.length<6){
+        if(password.length < 6){
           err({message: "Password should be more than six characters"});
         }
         else{
           User.create({
             email: email,
+            username: username,
             password: this.encryptPass(password)
           }).error(function(error){
             console.log(error);
             if(error.username){
               err({message: "Your username should be at least 6 characters long", username: username});
             }
+            else if(error.email){
+              err({message: 'An account with that email already exists', email: email});
+            }
             else{
-              err({message: 'An account with that username already exists', username: username});
+              err({message: 'An account with that username already exists'})
             }
           }).success(function(user){
             success({message: 'Account created, please log in now'});

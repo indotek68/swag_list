@@ -70,9 +70,31 @@ app.get('/signup', function(req, res){
 	
 });
 
+//sign up post
+app.post("/submit", function(req, res){
+	var email = req.body.email;
+	var username = req.body.username;
+	var password = req.body.password;
+
+
+	db.user.createNewUser(email, username, password, 
+		function(err){
+			res.render("signup", {message: err.message, username: username});
+		},
+		function(success){
+			res.redirect("/login", {message: success.message});
+		}
+	);
+})
+
 //login
 app.get('/login', function(req, res){
-	res.render('login')
+	if(!req.user){
+		res.render("login", {message: req.flash('loginMessage'), username:""});
+	}
+	else{
+		res.redirect('/mylist')
+	}
 });
 
 //find this works with the api to request the url and sends body to results.ejs
@@ -124,11 +146,15 @@ app.get('/event/:venueId/:eventId', function(req, res){
 	})
 })
 
-//sign up
-app.post("/signup", function(req, res){
-
-})
-
+app.get("/mylist", function(render, res){
+	res.render("mylist", {
+		//rusnt a function to see if the user is authenticated - returns true or false
+		isAuthenticate: req.isAuthenticated(),
+		myList: myListArray,
+		user: req.user
+	});
+	//console.log(myListArray)
+});
 
 app.post("/mylist", function(req, res){
 	var event = JSON.parse(req.body.myList);
@@ -137,11 +163,6 @@ app.post("/mylist", function(req, res){
 	myListArray.push(event)
 
 	res.redirect("/myList")
-})
-
-app.get("/mylist", function(render, res){
-	res.render("mylist", {myList: myListArray})
-	//console.log(myListArray)
 })
 
 app.listen(process.env.PORT || 3000, function(){

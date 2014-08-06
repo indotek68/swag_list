@@ -1,7 +1,15 @@
 <% include partials/header.ejs %> 
 
-<div>
-	<form method='post' action="/signup">
+<h2>Signup</h2>
+	
+	<% if(typeof message != 'undefined') { %>
+		<div class="alert alert-danger">
+			<%= message %>
+		</div>
+	<% } %>
+
+<div class="row">
+	<form method='post' action="/submit">
 		<label for="email">Email</label>
 		<input id="email" type="email" name="email">
 
@@ -11,8 +19,12 @@
 		<label for="password">Password</label>
 		<input id="password" type="password" name="password">
 
-		<input type="submit" value="Sign Up">
+		<input class="btn btn-lg btn-primary"type="submit" value="Sign Up">
 	</form>
+</div>
+<div class="row">
+	<p>Already have an account? <a href="/login">Login here</a></p>
+
 </div>
 
 <% include partials/footer.ejs %> 
