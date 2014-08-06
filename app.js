@@ -60,7 +60,8 @@ app.get('/event/:venueId/:eventId', function(req, res){
 				console.log("LOOPED ONCE! WTF IS GOING ON?")
 
 				if(event.id === Number(eventId)){
-					res.render('event', {event: event})
+					// console.log(event.datetime.toString())
+					res.render('event', {eventsList: event})
 					console.log(event)
 				}
 				else{
