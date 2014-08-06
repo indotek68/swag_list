@@ -70,10 +70,10 @@ app.get('/event/:venueId/:eventId', function(req, res){
 				if(event.id === Number(eventId)){
 					// console.log(event.datetime.toString())
 					res.render('event', {eventsList: event})
-					console.log(event)
+					//console.log(event)
 				}
 				else{
-					console.log("NO MATCHES!")
+					//console.log("NO MATCHES!")
 				}
 				
 			})
@@ -85,11 +85,14 @@ app.post("/mylist", function(req, res){
 	var event = req.body.myList;
 	console.log(event)
 
+	myListArray.push(event)
+
 	res.redirect("/myList")
 })
 
 app.get("/mylist", function(render, res){
-	res.render("mylist", {mylist: myListArray})
+	res.render("mylist", {myList: myListArray})
+	//console.log(myListArray)
 })
 
 app.listen(3000, function(){

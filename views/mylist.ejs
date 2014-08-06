@@ -1,5 +1,7 @@
 <% include partials/header.ejs %>
 
-Hello World
+<% myList.forEach(function(list){ %>
+	<p><%= list.ticket_url %></p>
+<% }) %>
 
 <% include partials/footer.ejs %>
