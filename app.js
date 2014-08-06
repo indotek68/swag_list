@@ -1,11 +1,17 @@
 // app.js
 
 var express = require("express");
-// var db = require("./models/index.js");
+var db = require("./models/index.js");
+
 var request = require("request");
 var bodyParser = require("body-parser");
-var date = require( 'useful-date' );
-var dateEng = require( 'useful-date/locale/en-US.js' );
+// var date = require( 'useful-date' );
+// var dateEng = require( 'useful-date/locale/en-US.js' );
+var passport = require("passport")
+var passportLocal = require("passport-local")
+var cookieParser = require('cookie-parser')
+var cookieSession = require("cookie-session")
+var flash = require('connect-flash')
 
 var app = express();
 var myListArray = [];
@@ -13,6 +19,35 @@ var myListArray = [];
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded());
 app.set('view engine', 'ejs');
+
+//cookie session middleware
+app.use(cookieSession({
+	secret: 'thisismysecretkey',
+	name: 'session with cookie data',
+	maxage: 36000
+}));
+
+//get passport started
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+
+passport.serializeUser(function(user, dine){
+	console.log("Serialize just ran");
+	done(null, user.id)
+});
+
+passport.deserializeUser(function(id, done){
+	console.log("Deserialized just ran");
+	db.user.find({
+		where: {
+			id: id
+		}
+	})
+	.done(function(error, user){
+		done(error, user);
+	});
+});
 
 //splash page
 app.get('/', function(req, res){
@@ -26,7 +61,13 @@ app.get('/search', function(req, res){
 
 //signup
 app.get('/signup', function(req, res){
-	res.render('signup')
+	if(!req.user){
+		res.render('signup', {username: ""});
+	}
+	else{
+		res.redirect('/mylist')
+	}
+	
 });
 
 //login
@@ -82,6 +123,12 @@ app.get('/event/:venueId/:eventId', function(req, res){
 		}
 	})
 })
+
+//sign up
+app.post("/signup", function(req, res){
+
+})
+
 
 app.post("/mylist", function(req, res){
 	var event = JSON.parse(req.body.myList);

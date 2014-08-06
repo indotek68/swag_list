@@ -2,12 +2,14 @@
 
 var bcrypt = require("bcrypt");
 var salt = bcrypt.genSaltSync(10);
+var passport = require("passport");
+var passportLocal = require("passport-local");
 
 function User(sequelize, DataTypes){
 	var User = sequelize.define('user', {
 		username: {
       type: DataTypes.STRING,
-      allowNull: false,
+      notEmpty: true,
       unique: true,
       validate: {
         len: [6,30]
@@ -18,10 +20,10 @@ function User(sequelize, DataTypes){
       validate: {
         notEmpty: true
       }
-    }
+    },
     email: {
       type: DataTypes.STRING,
-      allowNull: false,
+      notEmpty: true,
       validate: {
         isEmail: true
       }
@@ -94,6 +96,8 @@ passport.use(new passportLocal.Strategy({
   
   return User;
 }
+
+module.exports = User;
 
 
 

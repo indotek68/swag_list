@@ -10,4 +10,6 @@ function Event(sequelize, DataTypes){
     }
   })
   return Event;
-}
+};
+
+module.exports = Event;

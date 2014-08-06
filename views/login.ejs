@@ -1,6 +1,6 @@
 <% include partials/header.ejs %>  
 
-<div>
+<div class="row">
 	<form action="/login">
 		<label for="username">Username</label>
 		<input id="" type="text" name="username">
@@ -10,6 +10,9 @@
 
 		<input class="btn btn-lg btn-success"type="submit" value="Login">
 	</form>
+</div>
+<div class="row">
+	<p>Don't have an account? <a href="/signup">Sign up</a></p>
 </div>
 
 <% include partials/footer.ejs %> 

@@ -2,6 +2,11 @@
 
 <script>
   
+  //  var layer = new OpenLayers.Layer.Stamen("toner");
+  // var map = new OpenLayers.Map("map");
+  // map.addLayer(layer);
+
+
   eventsList = <%- JSON.stringify(eventsList) %>;
   console.log("eventsList" + eventsList);
   L.mapbox.accessToken = 'pk.eyJ1IjoiaW5kb3RlazY4IiwiYSI6Im9Md3Q5SGMifQ.v-CzVWIHkkKA2hMUkmDpUw';
@@ -38,6 +43,8 @@
 		  .setView([37.775316, -122.437684], 16);
 
 	var myLayer = L.mapbox.featureLayer().addTo(map);
+
+  var stamenLayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png').addTo(map);
 
 	// The GeoJSON representing the two point features
 	var geojson = {
