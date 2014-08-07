@@ -54,5 +54,13 @@
 
 	myLayer.setGeoJSON(geojson);
   map.fitBounds(myLayer.getBounds());
+
+  // map.dragging.disable();
+  //map.touchZoom.disable();
+  //map.doubleClickZoom.enable();
+  map.scrollWheelZoom.disable();
+  // if (map.tap) map.tap.disable();
+
+  
 	
 </script>

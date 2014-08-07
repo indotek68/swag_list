@@ -3,23 +3,34 @@
   <div class="jumbotron">
     <div id='map'></div>
   </div>
+
   <div class="row">
+    <div class="col-xs-4">
       <h2><%=date %></h2>
+    </div>
+    <div class="col-xs-4"></div>
+    <div class="col-xs-4"></div>
   </div>
+
 	<div class="row">
-			<% eventsList.forEach(function(event){ %>
-      <a href="event/<%= event.venue.id %>/<%= event.id %>">
-				<h4><%=event.venue.name %></h4>
-        <p><%=event.venue.city %>, <%=event.venue.region %></p>
-
-				<% event.artists.forEach(function(artist){ %>
-					<p><%=artist.name %></p>
-					<% }) %>
-				<% }) %>
-    </a>
+    <div class="col-xs-4">
+      <% eventsList.forEach(function(event){ %>
+          <a href="event/<%= event.venue.id %>/<%= event.id %>">
+            <h4><%=event.venue.name %></h4>
+              <p>
+                <%=event.venue.city %>, <%=event.venue.region %>
+              </p>
+              <% event.artists.forEach(function(artist){ %>
+              <p>
+                <%=artist.name %>
+              </p>
+                <% }) %>
+              <% }) %>
+          </a>
+    </div>
+    <div class="col-xs-4"></div>
+    <div class="col-xs-4"></div>	
   </div>
-
-
 
 <% include partials/footer.ejs %>  
 <% include partials/map_script.ejs %>  

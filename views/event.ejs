@@ -1,6 +1,12 @@
 <% include partials/header.ejs %>  
 
-<a href="<%= eventsList.venue.url%>"><h3><%= eventsList.venue.name %><h3></a>
+<div class="row">
+	<div class="col-xs-4"></div>
+	<div class="col-xs-4"></div>
+	<div class="col-xs-4"></div>
+</div>
+
+<a href="<%= eventsList.venue.url%>"><h2><%= eventsList.venue.name %><h2></a>
 <h4><%= eventsList.venue.city %> <%= eventsList.venue.region %> </h4>
 <strong>Showtime: </strong>
 <p><%= eventsList.datetime %><p>
@@ -22,5 +28,6 @@
 
 	<input class="btn btn-default" type="submit" value="Save To My List">
 </form>
+
 
 <% include partials/footer.ejs %>

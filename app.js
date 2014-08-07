@@ -144,31 +144,27 @@ app.get('/event/:venueId/:eventId', function(req, res){
 	request(venueUrl, function(error, response, body){
 		if(!error){
 			var	body = JSON.parse(body);
-
+			
+			console.log("****************")
+			
 			body.forEach(function(event){
-				console.log("LOOPED ONCE! WTF IS GOING ON?")
-
+				//console.log("event " + event.id);
+				// res.render("hello")
+			// 	console.log("LOOPED ONCE! WTF IS GOING ON?")
 				if(event.id === Number(eventId)){
-					// console.log(event.datetime.toString())
 					res.render('event', {eventsList: event})
 					//console.log(event)
 				}
 				else{
-					//console.log("NO MATCHES!")
+					console.log("NO MATCHES!")
 				}
-				
 			})
 		}
 	})
 })
 
 app.get("/mylist", function(req, res){
-	res.render("mylist", {
-		//rusnt a function to see if the user is authenticated - returns true or false
-		isAuthenticate: req.isAuthenticated(),
-		myList: myListArray,
-		user: req.user
-	});
+	res.render("mylist");
 	//console.log(myListArray)
 });
 

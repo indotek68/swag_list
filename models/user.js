@@ -52,7 +52,11 @@ function User(sequelize, DataTypes){
             username: username,
             password: this.encryptPass(password)
           }).error(function(error){
-            //console.log(error);
+            console.log(error);
+            console.log("\n**********************************");
+            console.log(error.email);
+            console.log("\n**********************************");
+            console.log(error.username);
             if(error.username){
               err({message: "Your username should be at least 6 characters long", username: username});
               
@@ -61,7 +65,7 @@ function User(sequelize, DataTypes){
               err({message: 'An account with that email already exists', email: email});
             }
             else{
-              err({message: 'An account with that username already exists'})
+              err({message: 'An account with that username or email already exists'});
             }
           }).success(function(user){
             success({message: 'Account created, please log in now'});

@@ -18,15 +18,10 @@
         <li><a href="/Search">Event Search</a></li>
       </ul>
 
-      <% if (typeof isAuthenticated != undefined) { %>
+      
         <form class="navbar-form navbar-right" action="/login">
           <button type="submit" class="btn btn-success">Login</button>
         </form>
-      <% } else { %>
-         <form class="navbar-form navbar-right" action="/logout">
-          <button type="submit" class="btn btn-danger">Logout</button>
-        </form>
-      <% } %>
 
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
