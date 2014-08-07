@@ -1,8 +1,14 @@
 <% include partials/header.ejs %>  
 
 <h2>Login</h2>
+<% if(typeof message !== 'undefined') { %>
+	<div class="error">
+			<%= message %>
+	</div>
+<% } %>
+
 <div class="row">
-	<form action="/login">
+	<form action="/authenticate" method ="post">
 		<label for="username">Username</label>
 		<input id="" type="text" name="username">
 

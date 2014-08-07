@@ -20,6 +20,10 @@ h2{
 	margin-bottom: 1em;
 }
 
+.error{
+	color: red;
+}
+
 #splash-logo {
 	width: 30%;
 	height: 30%;

@@ -2,6 +2,7 @@
 
 var express = require("express");
 var db = require("./models/index.js");
+var locus = require('locus');
 
 var request = require("request");
 var bodyParser = require("body-parser");
@@ -32,7 +33,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-passport.serializeUser(function(user, dine){
+passport.serializeUser(function(user, done){
 	console.log("Serialize just ran");
 	done(null, user.id)
 });
@@ -79,10 +80,10 @@ app.post("/submit", function(req, res){
 
 	db.user.createNewUser(email, username, password, 
 		function(err){
-			res.render("signup", {message: err.message, username: username});
+			res.render("signup", {message: err.message, username: username, email: email});
 		},
 		function(success){
-			res.redirect("/login", {message: success.message});
+			res.redirect('/login');
 		}
 	);
 })
@@ -95,6 +96,17 @@ app.get('/login', function(req, res){
 	else{
 		res.redirect('/mylist')
 	}
+});
+
+app.post('/authenticate', passport.authenticate('local',{
+	successRedirect: '/search',
+	failureRedirect: '/login',
+	failureFlash: true
+}))
+
+app.get('/logout', function(req, res){
+	req.logout();
+	res.redirect('/')
 });
 
 //find this works with the api to request the url and sends body to results.ejs
@@ -146,7 +158,7 @@ app.get('/event/:venueId/:eventId', function(req, res){
 	})
 })
 
-app.get("/mylist", function(render, res){
+app.get("/mylist", function(req, res){
 	res.render("mylist", {
 		//rusnt a function to see if the user is authenticated - returns true or false
 		isAuthenticate: req.isAuthenticated(),
@@ -164,6 +176,11 @@ app.post("/mylist", function(req, res){
 
 	res.redirect("/myList")
 })
+
+// app.get('*', function(req, res){
+// 	res.status(404);
+// 	res.render('404')
+// })
 
 app.listen(process.env.PORT || 3000, function(){
   console.log("SERVER listening on 3000")

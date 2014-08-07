@@ -24,6 +24,7 @@ function User(sequelize, DataTypes){
     email: {
       type: DataTypes.STRING,
       notEmpty: true,
+      unique: true,
       validate: {
         isEmail: true
       }
@@ -39,7 +40,7 @@ function User(sequelize, DataTypes){
         return hash;
       },
       comparePass: function(userpass, dbpass){
-        return bcrypt.comparSync(userpass, dbpass);
+        return bcrypt.compareSync(userpass, dbpass);
       },
       createNewUser: function(email, username, password, err, success){
         if(password.length < 6){
@@ -51,9 +52,10 @@ function User(sequelize, DataTypes){
             username: username,
             password: this.encryptPass(password)
           }).error(function(error){
-            console.log(error);
+            //console.log(error);
             if(error.username){
               err({message: "Your username should be at least 6 characters long", username: username});
+              
             }
             else if(error.email){
               err({message: 'An account with that email already exists', email: email});
