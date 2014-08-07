@@ -2,6 +2,14 @@ h2{
 	font-family: 'Lobster', cursive;
 }
 
+.map-container {
+	position: relative;
+}
+
+.venue-text {
+	font-family: 'Lobster', cursive;
+}
+
 .navbar-brand {
 	font-family: 'Lobster', cursive;
 	font-size: 2.5em;

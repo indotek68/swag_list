@@ -1,77 +1,70 @@
 <% include partials/header.ejs %>  
-
+    
 <div class="jumbotron">
-    <div id='map'></div>
+	<div id='map'></div>
 </div>
 
-<div class="row">
+<div class="row text-center">
 	<div class="col-xs-4"></div>
-	<div class="col-xs-4"></div>
+	<div class=" venue-text col-xs-4">
+		<a style="color: black" href="<%= eventsList.venue.url%>"><h1><%= eventsList.venue.name %><h1></a>
+
+	</div>
 	<div class="col-xs-4"></div>
 </div>
 
-<a href="<%= eventsList.venue.url%>"><h2><%= eventsList.venue.name %><h2></a>
-<h4><%= eventsList.venue.city %> <%= eventsList.venue.region %> </h4>
-<strong>Showtime: </strong>
-<p><%= eventsList.datetime %><p>
+<div class="row text-center">
+	<div class="col-xs-4"></div>
+	<div class="col-xs-4">
+	<h3><%= eventsList.datetime %></h3>
+	<h4><%= eventsList.venue.city %> <%= eventsList.venue.region %> </h4>
+	<p><a href="<%= eventsList.url %>">See event page</a>
+	</div>
+	<div class="col-xs-4"></div>
+</div>
 
-<strong>Artist:</strong>
-<% eventsList.artists.forEach(function(artist){ %>
-	<p><a href="<%=artist.url%>"><%= artist.name %></p></a>
-	<% }) %>
+<div class="row text-center">
+	<div class="col-xs-4"></div>
+	<div class="col-xs-4">
+		<h3>Artist</h3>
+			<% eventsList.artists.forEach(function(artist){ %>
+			<p><a href="<%=artist.url%>"><%= artist.name %></p></a>
+			<% }) %>
+	</div>
+	<div class="col-xs-4"></div>
+</div>
 
-<strong>Event Url:</strong> 
-<p><a href="<%= eventsList.url %>"><%= eventsList.url %>
+<div class="row text-center">
+	<div class="col-xs-4"></div>
+	<div class="col-xs-4">
+		<h3>Ticket Status</h3>
+		<% var status = eventsList.ticket_status %>
+		<% var statusUpperCase = status.toUpperCase(); %>
+		<p><%= statusUpperCase %></p>
+		<a class="btn btn-success btn-block" href="<%= eventsList.ticket_url %>">Buy Tickets</a>
+	</div>
+	<div class="col-xs-4"></div>
+</div>
 
-</a><%= eventsList.venue.longitude %>
-          <%= eventsList.venue.latitude %></p>
-
-<strong>Ticket Status:</strong> 
-<p><%= eventsList.ticket_status %></p>
-<a class="btn btn-default" href="<%= eventsList.ticket_url %>">Buy Tickets</a>
-
-<form method="post" action="/mylist">
-	<input type="hidden" name="myList" value="<%= JSON.stringify(eventsList) %>">
-
-	<input class="btn btn-default" type="submit" value="Save To My List">
-</form>
+<div class="row text-center">
+	<div class="col-xs-4"></div>
+	<div class="col-xs-4">
+		<form method="post" action="/mylist">
+			<% if(isAuthenticated) {%>
+			<input type="hidden" name="myList" value="<%= JSON.stringify(eventsList) %>">
+			<input class="btn btn-danger btn-block margin-top" type="submit" value="Save To My List">
+			<% }else{ %>
+			<input class="btn btn-default btn-block margin-top" disabled="disabled" type="submit" value="Save To My List">
+			<% } %>
+		</form>
+	
+	</div>
+	<div class="col-xs-4"></div>
+</div>
 
 
 <% include partials/footer.ejs %>
+<% include partials/event_map_script.ejs %>
 
-<script>
 
-var eventsList = <%- JSON.stringify(eventsList) %>;
-
-L.mapbox.accessToken = 'pk.eyJ1IjoiaW5kb3RlazY4IiwiYSI6Im9Md3Q5SGMifQ.v-CzVWIHkkKA2hMUkmDpUw';
-var map = L.mapbox.map('map', 'examples.map-20v6611k')
-    .setView([37.775316, -122.437684], 16);
-
-var myLayer = L.mapbox.featureLayer({
-    // this feature is in the GeoJSON format: see geojson.org
-    // for the full specification
-    type: 'Feature',
-    geometry: {
-        type: 'Point',
-        // coordinates here are in longitude, latitude order because
-        // x, y is the standard for GeoJSON and many formats
-        coordinates: [Number(eventsList.venue.longitude),
-          Number(eventsList.venue.latitude)]
-    },
-    properties: {
-        title: 'Peregrine Espresso',
-        description: '1718 14th St NW, Washington, DC',
-        // one can customize markers by adding simplestyle properties
-        // https://www.mapbox.com/foundations/an-open-platform/#simplestyle
-        'marker-size': 'large',
-        'marker-color': '#BE9A6B',
-        'marker-symbol': 'cafe'
-    }
-}).addTo(map);
-
-map.fitBounds(myLayer.getBounds());
-
-map.scrollWheelZoom.disable();
-
-</script>
 
