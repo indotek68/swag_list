@@ -16,7 +16,8 @@
 <div class="row text-center">
 	<div class="col-xs-4"></div>
 	<div class="col-xs-4">
-	<h3><%= eventsList.datetime %></h3>
+	<h3><%= usefulDate %></h3>
+	<h3><%= usefulTime %></h3>
 	<h4><%= eventsList.venue.city %> <%= eventsList.venue.region %> </h4>
 	<p><a href="<%= eventsList.url %>">See event page</a>
 	</div>
@@ -49,7 +50,7 @@
 <div class="row text-center">
 	<div class="col-xs-4"></div>
 	<div class="col-xs-4">
-		<form method="post" action="/mylist">
+		<form method="post" action="/create">
 			<% if(isAuthenticated) {%>
 			<input type="hidden" name="myList" value="<%= JSON.stringify(eventsList) %>">
 			<input class="btn btn-danger btn-block margin-top" type="submit" value="Save To My List">

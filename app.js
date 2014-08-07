@@ -6,13 +6,13 @@ var locus = require('locus');
 
 var request = require("request");
 var bodyParser = require("body-parser");
-// var date = require( 'useful-date' );
-// var dateEng = require( 'useful-date/locale/en-US.js' );
 var passport = require("passport");
 var passportLocal = require("passport-local");
 var cookieParser = require('cookie-parser');
 var cookieSession = require("cookie-session");
 var flash = require('connect-flash');
+
+var dateFormat = require('dateformat');
 
 var app = express();
 var myListArray = [];
@@ -134,8 +134,9 @@ app.get('/find', function(req, res){
 	request(url, function(error, response, body){
 		if(!error){
 			var body = JSON.parse(body);
+			var usefulDate = dateFormat(date, "UTC:dddd, mmmm dS, yyyy")
 			//console.log(body)
-			res.render('results', {eventsList: body, date: date, isAuthenticated: req.isAuthenticated()})
+			res.render('results', {eventsList: body, usefulDate: usefulDate, date: date, isAuthenticated: req.isAuthenticated()})
 		}
 	})
 })
@@ -151,15 +152,19 @@ app.get('/event/:venueId/:eventId', function(req, res){
 	request(venueUrl, function(error, response, body){
 		if(!error){
 			var	body = JSON.parse(body);
-			
-			console.log("****************")
-			
+						
 			body.forEach(function(event){
 				//console.log("event " + event.id);
 				// res.render("hello")
 			// 	console.log("LOOPED ONCE! WTF IS GOING ON?")
 				if(event.id === Number(eventId)){
-					res.render('event', {eventsList: event, isAuthenticated: req.isAuthenticated()})
+
+					var usefulDate = dateFormat(event.datetime,"UTC:dddd, mmmm dS, yyyy" )
+					//var usefulDate = dateFormat(event.datetime, "fullDate")
+					console.log(event.datetime)
+					var usefulTime = dateFormat(event.datetime, "UTC:h:MM:ss TT")
+
+					res.render('event', {eventsList: event, usefulTime: usefulTime, usefulDate: usefulDate, isAuthenticated: req.isAuthenticated()})
 					//console.log(event)
 				}
 				else{
@@ -171,18 +176,37 @@ app.get('/event/:venueId/:eventId', function(req, res){
 })
 
 app.get("/mylist", function(req, res){
-	res.render("mylist");
+	res.render("mylist", {myList: myListArray, isAuthenticated: req.isAuthenticated()});
 	//console.log(myListArray)
 });
 
-app.post("/mylist", function(req, res){
-	var event = JSON.parse(req.body.myList);
-	console.log(event)
+app.post("/create", function(req, res){
+	var track = JSON.parse(req.body.myList);
+	var id = track.id.toString();
+	var showDate = track.datetime.toString();
 
-	myListArray.push(event)
+	console.log(id + "************************************")
+	console.log(showDate)
+	console.log(dateFormat(showDate, "fullDate"));
 
+	db.event.findOrCreate({eventId: id}, {show_date: showDate})
+		.success(function(shows, created){
+			console.log(shows);
+		})
+
+
+// myListArray.push(track)
+
+// 	User
+//   .findOrCreate({ username: 'sdepold' }, { job: 'Technical Lead JavaScript' })
+//   .success(function(user, created) {
+//     console.log(user.values)
+//     console.log(created)
+// })
 	res.redirect("/myList")
-})
+});
+
+
 
 // app.get('*', function(req, res){
 // 	res.status(404);
