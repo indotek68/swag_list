@@ -1,25 +1,41 @@
 <% include partials/header.ejs %>  
-
-<h2>Login</h2>
-<% if(typeof message !== 'undefined') { %>
-	<div class="error">
-			<%= message %>
-	</div>
-<% } %>
-
-<div class="row">
-	<form action="/authenticate" method ="post">
-		<label for="username">Username</label>
-		<input id="" type="text" name="username">
-
-		<label for="password">Password</label>
-		<input id="password" type="password" name="password">
-
-		<input class="btn btn-lg btn-success"type="submit" value="Login">
-	</form>
+<div class="row text-center">
+	<h2>Please Login</h2>
 </div>
-<div class="row">
+
+<div class="row error">
+	<div class="col-xs-4"></div>
+	<div class="col-xs-4">
+			<% if(typeof message !== 'undefined') { %>
+			<p><%= message %></p>
+			<% } %>
+	</div>
+	<div class="col-xs-4"></div>
+</div>
+
+
+<div class="row text-center">
+	<div class="col-xs-4"></div>
+	<div class="col-xs-4">
+		<form class="form-signin" role="form" action="/authenticate" method ="post">
+
+			<!-- <label for="username">Username</label> -->
+			<input class="form-control" id="username" type="text" name="username" placeholder="Username"required autofocus>
+
+			<!-- <label for="password">Password</label> -->
+			<input class="form-control" id="password" type="password" name="password" placeholder="Password" required>
+
+			<input class="btn btn-lg btn-success btn-block margin-top margin-bottom"type="submit" value="Login">
+		</form>
+	</div>
+	<div class="col-xs-4"></div>
+</div>
+<div class="row text-center">
+	<div class="col-xs-4"></div>
+	<div class="col-xs-4">
 	<p>Don't have an account? <a href="/signup">Sign up</a></p>
+	</div>
+	<div class="col-xs-4"></div>
 </div>
 
 <% include partials/footer.ejs %> 

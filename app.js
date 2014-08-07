@@ -8,11 +8,11 @@ var request = require("request");
 var bodyParser = require("body-parser");
 // var date = require( 'useful-date' );
 // var dateEng = require( 'useful-date/locale/en-US.js' );
-var passport = require("passport")
-var passportLocal = require("passport-local")
-var cookieParser = require('cookie-parser')
-var cookieSession = require("cookie-session")
-var flash = require('connect-flash')
+var passport = require("passport");
+var passportLocal = require("passport-local");
+var cookieParser = require('cookie-parser');
+var cookieSession = require("cookie-session");
+var flash = require('connect-flash');
 
 var app = express();
 var myListArray = [];
@@ -35,7 +35,7 @@ app.use(flash());
 
 passport.serializeUser(function(user, done){
 	console.log("Serialize just ran");
-	done(null, user.id)
+	done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done){
@@ -52,12 +52,8 @@ passport.deserializeUser(function(id, done){
 
 //splash page
 app.get('/', function(req, res){
-	res.render('splash')
-});
-
-//search
-app.get('/search', function(req, res){
-	res.render('search')
+	console.log("LOGIN STATE: " + req.isAuthenticated());
+	res.render('splash', {isAuthenticated: req.isAuthenticated()});
 });
 
 //signup
@@ -66,7 +62,7 @@ app.get('/signup', function(req, res){
 		res.render('signup', {username: ""});
 	}
 	else{
-		res.redirect('/mylist')
+		res.redirect('/search');
 	}
 	
 });
@@ -86,7 +82,7 @@ app.post("/submit", function(req, res){
 			res.redirect('/login');
 		}
 	);
-})
+});
 
 //login
 app.get('/login', function(req, res){
@@ -94,7 +90,7 @@ app.get('/login', function(req, res){
 		res.render("login", {message: req.flash('loginMessage'), username:""});
 	}
 	else{
-		res.redirect('/mylist')
+		res.redirect('/search');
 	}
 });
 
@@ -102,11 +98,19 @@ app.post('/authenticate', passport.authenticate('local',{
 	successRedirect: '/search',
 	failureRedirect: '/login',
 	failureFlash: true
-}))
+}));
 
 app.get('/logout', function(req, res){
 	req.logout();
-	res.redirect('/')
+	res.redirect('/');
+});
+
+//search
+app.get('/search', function(req, res){
+	res.render('search', {
+		isAuthenticated: req.isAuthenticated(),
+		user: req.user
+	});
 });
 
 //find this works with the api to request the url and sends body to results.ejs

@@ -20,6 +20,10 @@ h2{
 	margin-bottom: 1em;
 }
 
+.margin-top {
+	margin-top: 1em;
+}
+
 .error{
 	color: red;
 }
