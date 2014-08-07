@@ -25,7 +25,7 @@ app.set('view engine', 'ejs');
 app.use(cookieSession({
 	secret: 'thisismysecretkey',
 	name: 'session with cookie data',
-	maxage: 36000
+	maxage: 604800000
 }));
 
 //get passport started
@@ -52,13 +52,17 @@ passport.deserializeUser(function(id, done){
 
 //splash page
 app.get('/', function(req, res){
-	console.log("LOGIN STATE: " + req.isAuthenticated());
-	res.render('splash', {isAuthenticated: req.isAuthenticated()});
+	if (!req.user){
+		res.render('splash', {isAuthenticated: req.isAuthenticated()})
+	} else {
+		res.redirect('/search');
+	}
 });
 
 //signup
 app.get('/signup', function(req, res){
 	if(!req.user){
+		console.log("USER " + req.user)
 		res.render('signup', {username: ""});
 	}
 	else{
@@ -87,14 +91,17 @@ app.post("/submit", function(req, res){
 //login
 app.get('/login', function(req, res){
 	if(!req.user){
-		res.render("login", {message: req.flash('loginMessage'), username:""});
+		res.render("login", {message: req.flash('loginMessage'), 
+			username:"",
+			isAuthenticated: req.isAuthenticated(),
+	});
 	}
 	else{
 		res.redirect('/search');
 	}
 });
 
-app.post('/authenticate', passport.authenticate('local',{
+app.post('/authenticate', passport.authenticate('local', {
 	successRedirect: '/search',
 	failureRedirect: '/login',
 	failureFlash: true
@@ -128,7 +135,7 @@ app.get('/find', function(req, res){
 		if(!error){
 			var body = JSON.parse(body);
 			//console.log(body)
-			res.render('results', {eventsList: body, date: date})
+			res.render('results', {eventsList: body, date: date, isAuthenticated: req.isAuthenticated()})
 		}
 	})
 })
@@ -152,7 +159,7 @@ app.get('/event/:venueId/:eventId', function(req, res){
 				// res.render("hello")
 			// 	console.log("LOOPED ONCE! WTF IS GOING ON?")
 				if(event.id === Number(eventId)){
-					res.render('event', {eventsList: event})
+					res.render('event', {eventsList: event, isAuthenticated: req.isAuthenticated()})
 					//console.log(event)
 				}
 				else{

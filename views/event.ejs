@@ -1,5 +1,9 @@
 <% include partials/header.ejs %>  
 
+<div class="jumbotron">
+    <div id='map'></div>
+</div>
+
 <div class="row">
 	<div class="col-xs-4"></div>
 	<div class="col-xs-4"></div>
@@ -17,7 +21,10 @@
 	<% }) %>
 
 <strong>Event Url:</strong> 
-<p><a href="<%= eventsList.url %>"><%= eventsList.url %></a></p>
+<p><a href="<%= eventsList.url %>"><%= eventsList.url %>
+
+</a><%= eventsList.venue.longitude %>
+          <%= eventsList.venue.latitude %></p>
 
 <strong>Ticket Status:</strong> 
 <p><%= eventsList.ticket_status %></p>
@@ -31,3 +38,40 @@
 
 
 <% include partials/footer.ejs %>
+
+<script>
+
+var eventsList = <%- JSON.stringify(eventsList) %>;
+
+L.mapbox.accessToken = 'pk.eyJ1IjoiaW5kb3RlazY4IiwiYSI6Im9Md3Q5SGMifQ.v-CzVWIHkkKA2hMUkmDpUw';
+var map = L.mapbox.map('map', 'examples.map-20v6611k')
+    .setView([37.775316, -122.437684], 16);
+
+var myLayer = L.mapbox.featureLayer({
+    // this feature is in the GeoJSON format: see geojson.org
+    // for the full specification
+    type: 'Feature',
+    geometry: {
+        type: 'Point',
+        // coordinates here are in longitude, latitude order because
+        // x, y is the standard for GeoJSON and many formats
+        coordinates: [Number(eventsList.venue.longitude),
+          Number(eventsList.venue.latitude)]
+    },
+    properties: {
+        title: 'Peregrine Espresso',
+        description: '1718 14th St NW, Washington, DC',
+        // one can customize markers by adding simplestyle properties
+        // https://www.mapbox.com/foundations/an-open-platform/#simplestyle
+        'marker-size': 'large',
+        'marker-color': '#BE9A6B',
+        'marker-symbol': 'cafe'
+    }
+}).addTo(map);
+
+map.fitBounds(myLayer.getBounds());
+
+map.scrollWheelZoom.disable();
+
+</script>
+

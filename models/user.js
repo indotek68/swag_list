@@ -61,11 +61,14 @@ function User(sequelize, DataTypes){
               err({message: "Your username should be at least 6 characters long", username: username});
               
             }
-            else if(error.email){
-              err({message: 'An account with that email already exists', email: email});
+            else{
+              err({message: 'An account with that username already exists'});
+            }
+            if(error.email){
+              err({message: 'That is not a valid email address', email: email});
             }
             else{
-              err({message: 'An account with that username or email already exists'});
+              err({message: 'An account with that email already exists'});
             }
           }).success(function(user){
             success({message: 'Account created, please log in now'});
