@@ -177,32 +177,60 @@ app.get('/event/:venueId/:eventId', function(req, res){
 })
 
 app.get("/mylist", function(req, res){
+
 	db.user.find(req.user.id)
 		.success(function(userFromDb) {
   // projects will be an array of Project instances with the specified name
   		userFromDb.getEvents().success(function (myEvents) {
-  			console.log("myEvents" +  myEvents);
+  			//console.log("myEvents!!!!!!!!!!!!!!!!!" +  JSON.stringify(myEvents));
+  				myEvents.forEach(function(event){
+  					
+  					var eventId = event.eventId;
+  					var venueId = event.show_data;
+
+  					var venueUrl = "http://api.bandsintown.com/venues/" + venueId + "/events.json?app_id=SWAG_LIST";
+  					
+  					console.log(venueId + " " + eventId )
+
+						request(venueUrl, function(error, response, body){
+							if(!error){
+						
+						myEvents.forEach(function(event){
+						console.log("LOOPED ONCE! WTF IS GOING ON?")
+							if(event.id === Number(eventId)){
+
+								var usefulDate = dateFormat(event.datetime,"UTC:dddd, mmmm dS, yyyy" );
+								var usefulTime = dateFormat(event.datetime, "UTC:h:MM:ss TT");
+
+								res.render('myList', {eventsList: event, usefulTime: usefulTime, usefulDate: usefulDate, isAuthenticated: req.isAuthenticated()})
+								//console.log(event)
+							}
+							else{
+								console.log("NO MATCHES!")
+							}
+						})
+					}
+
+				}) 			
   		});
 	})
-	res.render("mylist", {myList: myListArray, isAuthenticated: req.isAuthenticated()});
-	//console.log(myListArray)
 });
 
 app.post("/create", function(req, res){
 	var track = JSON.parse(req.body.myList);
 	var venueId = track.venue.id
 	var venueIdString = venueId.toString();
-	console.log("!!!!!!!!!!!!!!!!!" + venueIdString)
+	// console.log("!!!!!!!!!!!!!!!!!" + venueIdString)
 	var eventId = track.id.toString();
 	var showDate = track.datetime.toString();
 
 	if(req.user){
 		db.event.findOrCreate({eventId: eventId}, {show_data: venueId, show_date: showDate})
 			.success(function(show, created){
-				console.log("******************************")
-				console.log("CREATED" + created)
+				// console.log("******************************")
+				// console.log("CREATED" + created)
 				req.user.addEvent(show).success(function(){
-					console.log("SHOW " +  JSON.stringify(show))
+					//console.log("SHOW " +  JSON.stringify(show))
 				})
 			})
 		res.redirect("/myList")
