@@ -17,6 +17,7 @@ var dateFormat = require('dateformat');
 
 var app = express();
 var myListArray = [];
+var favorites = [];
 
 var isCreated = true;
 
@@ -160,10 +161,10 @@ app.get('/event/:venueId/:eventId', function(req, res){
 			// 	console.log("LOOPED ONCE! WTF IS GOING ON?")
 				if(event.id === Number(eventId)){
 
-					var usefulDate = dateFormat(event.datetime,"UTC:dddd, mmmm dS, yyyy" )
+					var usefulDate = dateFormat(event.datetime,"UTC:dddd, mmmm dS, yyyy" );
 					//var usefulDate = dateFormat(event.datetime, "fullDate")
 					console.log(event.datetime)
-					var usefulTime = dateFormat(event.datetime, "UTC:h:MM:ss TT")
+					var usefulTime = dateFormat(event.datetime, "UTC:h:MM:ss TT");
 
 					res.render('event', {eventsList: event, isCreated: isCreated, usefulTime: usefulTime, usefulDate: usefulDate, isAuthenticated: req.isAuthenticated()})
 					//console.log(event)
@@ -180,8 +181,10 @@ app.get("/mylist", function(req, res){
 
 	db.user.find(req.user.id)
 		.success(function(userFromDb) {
+			
   // projects will be an array of Project instances with the specified name
   		userFromDb.getEvents().success(function (myEvents) {
+  			
   			//console.log("myEvents!!!!!!!!!!!!!!!!!" +  JSON.stringify(myEvents));
   				myEvents.forEach(function(event){
   					
@@ -189,32 +192,35 @@ app.get("/mylist", function(req, res){
   					var venueId = event.show_data;
 
   					var venueUrl = "http://api.bandsintown.com/venues/" + venueId + "/events.json?app_id=SWAG_LIST";
-  					
   					console.log(venueId + " " + eventId )
 
-						request(venueUrl, function(error, response, body){
-							if(!error){
-						
-						myEvents.forEach(function(event){
-						console.log("LOOPED ONCE! WTF IS GOING ON?")
-							if(event.id === Number(eventId)){
-
-								var usefulDate = dateFormat(event.datetime,"UTC:dddd, mmmm dS, yyyy" );
-								var usefulTime = dateFormat(event.datetime, "UTC:h:MM:ss TT");
-
-								res.render('myList', {eventsList: event, usefulTime: usefulTime, usefulDate: usefulDate, isAuthenticated: req.isAuthenticated()})
-								//console.log(event)
-							}
-							else{
-								console.log("NO MATCHES!")
-							}
+  					request(venueUrl, function(error, response, body){
+  						
+  						if(!error){
+  							var	body = JSON.parse(body);
+  								body.forEach(function(shows){
+  									
+  									if(shows.id === Number(eventId))
+  									{	
+  										favorites.push(shows);
+  										console.log(favorites)
+  									}
+  									
+  								
+  							})
+  								
+  							}
 						})
-					}
+					});
 
-				}) 			
-  		});
-	})
-});
+					res.render('mylist', 
+  									{
+  										eventsList: favorites, 
+  										isAuthenticated: req.isAuthenticated() 
+  								})
+				})
+  	})
+  })
 
 app.post("/create", function(req, res){
 	var track = JSON.parse(req.body.myList);
