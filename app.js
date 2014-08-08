@@ -1,5 +1,6 @@
 // app.js
 
+
 var express = require("express");
 var db = require("./models/index.js");
 var locus = require('locus');
@@ -16,6 +17,8 @@ var dateFormat = require('dateformat');
 
 var app = express();
 var myListArray = [];
+
+var isCreated = true;
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded());
@@ -145,8 +148,6 @@ app.get('/find', function(req, res){
 app.get('/event/:venueId/:eventId', function(req, res){
 	var venueId = req.params.venueId;
 	var eventId = req.params.eventId;
-	//console.log("venue " + venueId)
-	//using venue events api
 	var venueUrl = "http://api.bandsintown.com/venues/" + venueId + "/events.json?app_id=SWAG_LIST"
 
 	request(venueUrl, function(error, response, body){
@@ -164,7 +165,7 @@ app.get('/event/:venueId/:eventId', function(req, res){
 					console.log(event.datetime)
 					var usefulTime = dateFormat(event.datetime, "UTC:h:MM:ss TT")
 
-					res.render('event', {eventsList: event, usefulTime: usefulTime, usefulDate: usefulDate, isAuthenticated: req.isAuthenticated()})
+					res.render('event', {eventsList: event, isCreated: isCreated, usefulTime: usefulTime, usefulDate: usefulDate, isAuthenticated: req.isAuthenticated()})
 					//console.log(event)
 				}
 				else{
@@ -176,34 +177,36 @@ app.get('/event/:venueId/:eventId', function(req, res){
 })
 
 app.get("/mylist", function(req, res){
+	db.user.find(req.user.id)
+		.success(function(userFromDb) {
+  // projects will be an array of Project instances with the specified name
+  		userFromDb.getEvents().success(function (myEvents) {
+  			console.log("myEvents", myEvents);
+  		});
+	})
 	res.render("mylist", {myList: myListArray, isAuthenticated: req.isAuthenticated()});
 	//console.log(myListArray)
 });
 
 app.post("/create", function(req, res){
 	var track = JSON.parse(req.body.myList);
-	var id = track.id.toString();
+	var venueId = track.venue.id
+	var venueIdString = venueId.toString();
+	console.log("!!!!!!!!!!!!!!!!!" + venueIdString)
+	var eventId = track.id.toString();
 	var showDate = track.datetime.toString();
 
-	console.log(id + "************************************")
-	console.log(showDate)
-	console.log(dateFormat(showDate, "fullDate"));
-
-	db.event.findOrCreate({eventId: id}, {show_date: showDate})
-		.success(function(shows, created){
-			console.log(shows);
-		})
-
-
-// myListArray.push(track)
-
-// 	User
-//   .findOrCreate({ username: 'sdepold' }, { job: 'Technical Lead JavaScript' })
-//   .success(function(user, created) {
-//     console.log(user.values)
-//     console.log(created)
-// })
-	res.redirect("/myList")
+	if(req.user){
+		db.event.findOrCreate({eventId: eventId}, {show_data: venueIdString, show_date: showDate})
+			.success(function(show, created){
+				console.log("******************************")
+				console.log("CREATED" + created)
+				req.user.addEvent(show).success(function(){
+					console.log("SHOW " +  JSON.stringify(show))
+				})
+			})
+		res.redirect("/myList")
+	}	
 });
 
 

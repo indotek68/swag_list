@@ -1,6 +1,8 @@
 function Event(sequelize, DataTypes){
 	var Event = sequelize.define('event', {
-    eventId: DataTypes.STRING 
+    eventId: DataTypes.STRING,
+    show_date: DataTypes.STRING,
+    show_data: DataTypes.STRING
 	},
   {
     classMethods: {
