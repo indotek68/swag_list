@@ -181,7 +181,7 @@ app.get("/mylist", function(req, res){
 		.success(function(userFromDb) {
   // projects will be an array of Project instances with the specified name
   		userFromDb.getEvents().success(function (myEvents) {
-  			console.log("myEvents", myEvents);
+  			console.log("myEvents" +  myEvents);
   		});
 	})
 	res.render("mylist", {myList: myListArray, isAuthenticated: req.isAuthenticated()});
@@ -197,7 +197,7 @@ app.post("/create", function(req, res){
 	var showDate = track.datetime.toString();
 
 	if(req.user){
-		db.event.findOrCreate({eventId: eventId}, {show_data: venueIdString, show_date: showDate})
+		db.event.findOrCreate({eventId: eventId}, {show_data: venueId, show_date: showDate})
 			.success(function(show, created){
 				console.log("******************************")
 				console.log("CREATED" + created)
