@@ -16,12 +16,15 @@
     <div class="col-xs-4">
       <% eventsList.forEach(function(event){ %>
           <a href="event/<%= event.venue.id %>/<%= event.id %>">
-            <h4><%=event.venue.name %></h4>
-              <p>
-                <%=event.venue.city %>, <%=event.venue.region %>
-              </p>
+            <div class="resuts-header">
+              <h4><%=event.venue.name %> | 
+                <span class="city">
+                  <%=event.venue.city %>, <%=event.venue.region %>
+                </span>
+              </h4>
+            </div>
               <% event.artists.forEach(function(artist){ %>
-              <p>
+              <p class= "artist-results">
                 <%=artist.name %>
               </p>
                 <% }) %>

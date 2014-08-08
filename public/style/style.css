@@ -16,6 +16,18 @@ h2{
 	color: black;
 }
 
+.artist-results {
+	margin-left: .75em;
+	font-size: 1em;
+}
+
+.results-header{
+	display: inline;
+}
+
+.city{
+	font-size: .85em;
+}
 
 .splash-text{
 	font-family: 'Lobster', cursive;
