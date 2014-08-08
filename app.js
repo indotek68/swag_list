@@ -179,7 +179,7 @@ app.get('/event/:venueId/:eventId', function(req, res){
 })
 
 app.get("/mylist", function(req, res){
-
+if(req.user){
 	db.user.find(req.user.id).success(function(userFromDb) {
 			
   // projects will be an array of Project instances with the specified name
@@ -187,36 +187,16 @@ app.get("/mylist", function(req, res){
   			var myEvents = myEvents;
 
   			console.log("myEvents!!!!!!!!!!!!!!!!!" +  JSON.stringify(myEvents));
-  		// 		myEvents.forEach(function(event){
-  					
-  		// 			var eventId = event.eventId;
-  		// 			var venueId = event.show_data;
-
-  		// 			var venueUrl = "http://api.bandsintown.com/venues/" + venueId + "/events.json?app_id=SWAG_LIST";
-  		// 			console.log(venueId + " " + eventId )
-
-  		// 			request(venueUrl, function(error, response, body){
-  						
-  		// 				if(!error){
-  		// 					var	body = JSON.parse(body);
-				// 			body.forEach(function(shows){
-				// 				if(shows.id === Number(eventId))
-				// 				{	
-				// 					favorites.push(shows);
-				// 					console.log(favorites)
-				// 				}
-				// 			})
-  		// 				}
-				// 	})
-				// });
-		// res.render('mylist',{eventsList: favorites,isAuthenticated: req.isAuthenticated()})
 			res.render('mylist', {
 	  			myEvents: myEvents,
 	  			isAuthenticated: req.isAuthenticated()
 	  		})
 		})	
   	})
-  })
+} else {
+	res.redirect('/login');
+}
+})
 
 app.post("/create", function(req, res){
 	var track = JSON.parse(req.body.myList);
