@@ -37,9 +37,10 @@ h2{
 	color: red;
 }
 
-.brand-color {
+.navbar-style {
 
-	color: black;
+	padding-bottom: .25em;
+	border-bottom-style: dotted;
 }
 
 #splash-logo {
