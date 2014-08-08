@@ -66,7 +66,7 @@ app.get('/', function(req, res){
 app.get('/signup', function(req, res){
 	if(!req.user){
 		console.log("USER " + req.user)
-		res.render('signup', {username: ""});
+		res.render('signup', {username: "", isAuthenticated: req.isAuthenticated()});
 	}
 	else{
 		res.redirect('/search');
@@ -83,7 +83,7 @@ app.post("/submit", function(req, res){
 
 	db.user.createNewUser(email, username, password, 
 		function(err){
-			res.render("signup", {message: err.message, username: username, email: email});
+			res.render("signup", {message: err.message, username: username, email: email, isAuthenticated: req.isAuthenticated()});
 		},
 		function(success){
 			res.redirect('/login');
