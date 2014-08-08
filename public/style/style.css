@@ -16,6 +16,7 @@ h2{
 	color: black;
 }
 
+
 .splash-text{
 	font-family: 'Lobster', cursive;
 }
@@ -34,6 +35,11 @@ h2{
 
 .error{
 	color: red;
+}
+
+.brand-color {
+
+	color: black;
 }
 
 #splash-logo {

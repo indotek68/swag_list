@@ -52,7 +52,6 @@
 	<div class="col-xs-4">
 		<form method="post" action="/create">
 			<% if(isAuthenticated) {%>
-			<%= isCreated %>
 			<input type="hidden" name="myList" value="<%= JSON.stringify(eventsList) %>">
 			<input class="btn btn-danger btn-block margin-top" type="submit" value="Save To My List">
 			<% } else{ %>

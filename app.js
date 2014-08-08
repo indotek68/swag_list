@@ -18,6 +18,7 @@ var dateFormat = require('dateformat');
 var app = express();
 var myListArray = [];
 var favorites = [];
+var userName = "";
 
 var isCreated = true;
 
@@ -179,64 +180,59 @@ app.get('/event/:venueId/:eventId', function(req, res){
 
 app.get("/mylist", function(req, res){
 
-	db.user.find(req.user.id)
-		.success(function(userFromDb) {
+	db.user.find(req.user.id).success(function(userFromDb) {
 			
   // projects will be an array of Project instances with the specified name
   		userFromDb.getEvents().success(function (myEvents) {
-  			
-  			//console.log("myEvents!!!!!!!!!!!!!!!!!" +  JSON.stringify(myEvents));
-  				myEvents.forEach(function(event){
+  			var myEvents = myEvents;
+
+  			console.log("myEvents!!!!!!!!!!!!!!!!!" +  JSON.stringify(myEvents));
+  		// 		myEvents.forEach(function(event){
   					
-  					var eventId = event.eventId;
-  					var venueId = event.show_data;
+  		// 			var eventId = event.eventId;
+  		// 			var venueId = event.show_data;
 
-  					var venueUrl = "http://api.bandsintown.com/venues/" + venueId + "/events.json?app_id=SWAG_LIST";
-  					console.log(venueId + " " + eventId )
+  		// 			var venueUrl = "http://api.bandsintown.com/venues/" + venueId + "/events.json?app_id=SWAG_LIST";
+  		// 			console.log(venueId + " " + eventId )
 
-  					request(venueUrl, function(error, response, body){
+  		// 			request(venueUrl, function(error, response, body){
   						
-  						if(!error){
-  							var	body = JSON.parse(body);
-  								body.forEach(function(shows){
-  									
-  									if(shows.id === Number(eventId))
-  									{	
-  										favorites.push(shows);
-  										console.log(favorites)
-  									}
-  									
-  								
-  							})
-  								
-  							}
-						})
-					});
-
-					res.render('mylist', 
-  									{
-  										eventsList: favorites, 
-  										isAuthenticated: req.isAuthenticated() 
-  								})
-				})
+  		// 				if(!error){
+  		// 					var	body = JSON.parse(body);
+				// 			body.forEach(function(shows){
+				// 				if(shows.id === Number(eventId))
+				// 				{	
+				// 					favorites.push(shows);
+				// 					console.log(favorites)
+				// 				}
+				// 			})
+  		// 				}
+				// 	})
+				// });
+		// res.render('mylist',{eventsList: favorites,isAuthenticated: req.isAuthenticated()})
+			res.render('mylist', {
+	  			myEvents: myEvents,
+	  			isAuthenticated: req.isAuthenticated()
+	  		})
+		})	
   	})
   })
 
 app.post("/create", function(req, res){
 	var track = JSON.parse(req.body.myList);
 	var venueId = track.venue.id
-	var venueIdString = venueId.toString();
-	// console.log("!!!!!!!!!!!!!!!!!" + venueIdString)
+	var venueName = track.venue.name;
 	var eventId = track.id.toString();
 	var showDate = track.datetime.toString();
+	var usefulDate = dateFormat(showDate, "UTC:mm/d/yy");
+	var eventUrl = track.url
 
 	if(req.user){
-		db.event.findOrCreate({eventId: eventId}, {show_data: venueId, show_date: showDate})
+		db.event.findOrCreate({eventId: eventUrl}, {show_data: venueName, show_date: usefulDate})
 			.success(function(show, created){
-				// console.log("******************************")
-				// console.log("CREATED" + created)
+				
 				req.user.addEvent(show).success(function(){
-					//console.log("SHOW " +  JSON.stringify(show))
+					
 				})
 			})
 		res.redirect("/myList")

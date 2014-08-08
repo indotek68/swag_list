@@ -1,9 +1,24 @@
 <% include partials/header.ejs %>
 
-<% eventsList.forEach(function(event){ %>
-  <p>
-    <%= event.venue.name %>
-  </p>
-<% }) %>
+<% myEvents.forEach(function(events){ %>
 
+	<nav class="navbar navbar-default" role="navigation">
+	  <div class="container-fluid">
+	    <!-- Brand and toggle get grouped for better mobile display -->
+	    <div class="navbar-header">
+	       <a class="navbar-brand" href="#"><%= events.show_date %></a>
+	       <a class="navbar-brand brand-color" href="<%= events.eventId%>"><%= events.show_data %></a>
+	    </div>
+
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      
+	      <form methode="delete" class="navbar-form navbar-right" action="/remove">
+	        <button type="submit" class="btn btn-danger">Remove</button>
+	      </form>
+
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+<%	}) %>
 <% include partials/footer.ejs %>
