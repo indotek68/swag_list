@@ -182,17 +182,15 @@ app.get("/mylist", function(req, res){
 if(req.user){
 	db.user.find(req.user.id).success(function(userFromDb) {
 			
-  // projects will be an array of Project instances with the specified name
   		userFromDb.getEvents().success(function (myEvents) {
   			var myEvents = myEvents;
-
-  			console.log("myEvents!!!!!!!!!!!!!!!!!" +  JSON.stringify(myEvents));
-			res.render('mylist', {
+  			//console.log("myEvents!!!!!!!!!!!!!!!!!" +  JSON.stringify(myEvents));
+				res.render('mylist', {
 	  			myEvents: myEvents,
 	  			isAuthenticated: req.isAuthenticated()
 	  		})
 		})	
-  	})
+  })
 } else {
 	res.redirect('/login');
 }
@@ -208,7 +206,7 @@ app.post("/create", function(req, res){
 	var eventUrl = track.url
 
 	if(req.user){
-		db.event.findOrCreate({eventId: eventUrl}, {show_data: venueName, show_date: usefulDate})
+		db.event.findOrCreate({eventId: eventId}, {show_data: venueName, show_date: usefulDate, venueId: venueId})
 			.success(function(show, created){
 				
 				req.user.addEvent(show).success(function(){
