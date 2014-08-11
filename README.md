@@ -18,6 +18,7 @@ Most of the concert/ event websites out there are not built with careful design 
 * Express
 * Bands In Town API
 * Map Box API
+* Stamen
 * Passport
 * Sequelize
 * Bootstrap
