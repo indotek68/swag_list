@@ -221,10 +221,10 @@ app.post("/create", function(req, res){
 
 
 
-// app.get('*', function(req, res){
-// 	res.status(404);
-// 	res.render('404')
-// })
+app.get('*', function(req, res){
+	res.status(404);
+	res.render('404');
+})
 
 app.listen(process.env.PORT || 3000, function(){
   console.log("SERVER listening on 3000")

@@ -2,6 +2,16 @@ h2{
 	font-family: 'Lobster', cursive;
 }
 
+.link {
+	color: blue;
+	font-size: 1.25em;
+}
+
+.no-hover:hover {
+	color: black;
+	pointer-events: none;
+}
+
 .map-container {
 	position: relative;
 }
