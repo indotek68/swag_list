@@ -12,13 +12,13 @@ var passportLocal = require("passport-local");
 var cookieParser = require('cookie-parser');
 var cookieSession = require("cookie-session");
 var flash = require('connect-flash');
+var methodOverride = require('method-override');
 
 var dateFormat = require('dateformat');
 
 var app = express();
 var myListArray = [];
 var favorites = [];
-var userName = "";
 
 var isCreated = true;
 
@@ -67,8 +67,7 @@ app.get('/', function(req, res){
 //signup
 app.get('/signup', function(req, res){
 	if(!req.user){
-		console.log("USER " + req.user)
-		res.render('signup', {username: "", isAuthenticated: req.isAuthenticated()});
+		res.render('signup', {isAuthenticated: req.isAuthenticated()});
 	}
 	else{
 		res.redirect('/search');
@@ -96,8 +95,7 @@ app.post("/submit", function(req, res){
 //login
 app.get('/login', function(req, res){
 	if(!req.user){
-		res.render("login", {message: req.flash('loginMessage'), 
-			username:"",
+			res.render("login", {message: req.flash('loginMessage'),
 			isAuthenticated: req.isAuthenticated(),
 	});
 	}
@@ -119,9 +117,13 @@ app.get('/logout', function(req, res){
 
 //search
 app.get('/search', function(req, res){
+	console.log("++++++++++++ " + req.user.username)
+	var username = req.user.username;
+
 	res.render('search', {
 		isAuthenticated: req.isAuthenticated(),
-		user: req.user
+		user: req.user,
+		username: username
 	});
 });
 
@@ -130,6 +132,7 @@ app.get('/find', function(req, res){
 	var area = req.query.area;
 	var radius = req.query.radius;
 	var date = req.query.date;
+	var username = req.user.username;
 
 	var url = "http://api.bandsintown.com/events/search?location="+ area +"&radius="+radius+"&date="+date+"&format=json&app_id=SWAG_LIST";
 
@@ -141,7 +144,12 @@ app.get('/find', function(req, res){
 			var body = JSON.parse(body);
 			var usefulDate = dateFormat(date, "UTC:dddd, mmmm dS, yyyy")
 			//console.log(body)
-			res.render('results', {eventsList: body, usefulDate: usefulDate, date: date, isAuthenticated: req.isAuthenticated()})
+			res.render('results', {eventsList: body, 
+				usefulDate: usefulDate, 
+				date: date, 
+				username: username,
+				isAuthenticated: req.isAuthenticated()
+			})
 		}
 	})
 })
@@ -151,6 +159,7 @@ app.get('/event/:venueId/:eventId', function(req, res){
 	var venueId = req.params.venueId;
 	var eventId = req.params.eventId;
 	var venueUrl = "http://api.bandsintown.com/venues/" + venueId + "/events.json?app_id=SWAG_LIST"
+	var username = req.user.username;
 
 	request(venueUrl, function(error, response, body){
 		if(!error){
@@ -167,7 +176,12 @@ app.get('/event/:venueId/:eventId', function(req, res){
 					console.log(event.datetime)
 					var usefulTime = dateFormat(event.datetime, "UTC:h:MM:ss TT");
 
-					res.render('event', {eventsList: event, isCreated: isCreated, usefulTime: usefulTime, usefulDate: usefulDate, isAuthenticated: req.isAuthenticated()})
+					res.render('event', {eventsList: event, 
+						isCreated: isCreated, 
+						usefulTime: usefulTime, 
+						usefulDate: usefulDate, 
+						username: username,
+						isAuthenticated: req.isAuthenticated()})
 					//console.log(event)
 				}
 				else{
@@ -184,12 +198,14 @@ if(req.user){
 			
   		userFromDb.getEvents().success(function (myEvents) {
   			var myEvents = myEvents;
+  			var username = req.user.username;s
   			//console.log("myEvents!!!!!!!!!!!!!!!!!" +  JSON.stringify(myEvents));
 				res.render('mylist', {
 	  			myEvents: myEvents,
+	  			username: username,
 	  			isAuthenticated: req.isAuthenticated()
 	  		})
-		})	
+			})	
   })
 } else {
 	res.redirect('/login');
@@ -216,6 +232,11 @@ app.post("/create", function(req, res){
 		res.redirect("/myList")
 	}	
 });
+
+// app.delete('/remove', function(req, res){
+// 	var eventId = req.body.eventId;
+
+// }
 
 
 
