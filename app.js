@@ -117,14 +117,17 @@ app.get('/logout', function(req, res){
 
 //search
 app.get('/search', function(req, res){
-	console.log("++++++++++++ " + req.user.username)
-	var username = req.user.username;
-
-	res.render('search', {
-		isAuthenticated: req.isAuthenticated(),
-		user: req.user,
-		username: username
-	});
+	// console.log("++++++++++++ " + req.user.username)
+	if(req.user){
+			var username = req.user.username;
+			res.render('search', {
+			isAuthenticated: req.isAuthenticated(),
+			user: req.user,
+			username: username
+		});
+	} else {
+		res.redirect('/login');
+	}	
 });
 
 //find this works with the api to request the url and sends body to results.ejs
