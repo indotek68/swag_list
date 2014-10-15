@@ -198,7 +198,7 @@ if(req.user){
 			
   		userFromDb.getEvents().success(function (myEvents) {
   			var myEvents = myEvents;
-  			var username = req.user.username;s
+  			var username = req.user.username;
   			//console.log("myEvents!!!!!!!!!!!!!!!!!" +  JSON.stringify(myEvents));
 				res.render('mylist', {
 	  			myEvents: myEvents,
