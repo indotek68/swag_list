@@ -161,7 +161,7 @@ app.get('/find', function(req, res){
 app.get('/event/:venueId/:eventId', function(req, res){
 	var venueId = req.params.venueId;
 	var eventId = req.params.eventId;
-	var venueUrl = "http://api.bandsintown.com/venues/" + venueId + "/events.json?app_id=SWAG_LIST"
+	var venueUrl = "http://api.bandsintown.com/venues/" + venueId + "/events.json?app_id=SWAG_LIST";
 	var username = req.user.username;
 
 	request(venueUrl, function(error, response, body){
@@ -217,7 +217,7 @@ if(req.user){
 
 app.post("/create", function(req, res){
 	var track = JSON.parse(req.body.myList);
-	var venueId = track.venue.id
+	var venId = track.venue.id
 	var venueName = track.venue.name;
 	var eventId = track.id.toString();
 	var showDate = track.datetime.toString();
@@ -225,7 +225,7 @@ app.post("/create", function(req, res){
 	var eventUrl = track.url
 
 	if(req.user){
-		db.event.findOrCreate({eventId: eventId}, {show_data: venueName, show_date: usefulDate, venueId: venueId})
+		db.event.findOrCreate({eventId: eventId}, {show_data: venueName, show_date: usefulDate, venueId: venId})
 			.success(function(show, created){
 				
 				req.user.addEvent(show).success(function(){
